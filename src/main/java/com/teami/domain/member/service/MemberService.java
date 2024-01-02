@@ -46,14 +46,20 @@ public class MemberService {
         String nickname = memberRequest.getNickname();
         String pw = memberRequest.getPassword();
 
+        //pw 암호화하는 과정 필요!!!!!!!!!!
+
+        //아이디가 존재하면
         if(memberRepository.findMemberByLoginId(loginId) != null){
             throw new ExceptionHandler(ErrorStatus.MEMBER_FOUND);
         }
+        //닉네임이 존재하면
         else if(memberRepository.findMemberByNickname(nickname) != null){
             throw new ExceptionHandler(ErrorStatus.NICKNAME_EXIST);
         }
 
+
         Member member = new Member(memberRequest);
+
         memberRepository.save(member);
         rewardService.createReward_Member(member);
         return true;
@@ -73,6 +79,8 @@ public class MemberService {
     }
 
     public Boolean addVisitorComment(VisitorCommentReq visitorCommentReq) {
+
+
         Optional<Member> writer = memberRepository.findById(visitorCommentReq.getWriterId());
         Optional<Member> owner = memberRepository.findById(visitorCommentReq.getOwnerId());
 
@@ -113,7 +121,8 @@ public class MemberService {
         if(v.isEmpty()){
             throw new ExceptionHandler(ErrorStatus.VISITOR_NOT_FOUND);
         }
-        VisitorCommentRes res = new VisitorCommentRes(v.get());
+
+        VisitorCommentRes res = new VisitorCommentRes(v.get(), true);
 
         return res;
     }

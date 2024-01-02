@@ -19,11 +19,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MissionService {
+
     @Value("${chat.api}")
     private String API_KEY;
 
-    @Value("${chat.comment}")
-    private String comment;
+    private static final String comment = "30일동안 하루 단위로 수행할 간단한 미션 생성해서 [n일차 : 미션] json 형태로 보내줘";
 
     private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 
@@ -62,6 +62,7 @@ public class MissionService {
     }
 
     public List<NewMissionResponse> parseMissionFromContent(String content) {
+        System.out.println("준석" + content);
         List<NewMissionResponse> missions = new ArrayList<>();
         String[] lines = content.split("\n");
         for (String line : lines) {
