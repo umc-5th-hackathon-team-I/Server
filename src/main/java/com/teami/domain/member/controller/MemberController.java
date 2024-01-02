@@ -1,5 +1,6 @@
 package com.teami.domain.member.controller;
 
+import com.teami.domain.calendar.service.CalendarService;
 import com.teami.domain.member.dto.request.LoginRequest;
 import com.teami.domain.member.dto.request.MemberRequest;
 import com.teami.domain.member.dto.request.VisitorCommentReq;
@@ -30,11 +31,12 @@ public class MemberController {
 
     @Autowired
     private MemberService memberService;
-
+    private CalendarService calendarService;
 
     @PostMapping("/signup")
     public ApiResponse<MemberIdResponse> addMember(@RequestBody MemberRequest memberRequest){
-        boolean res = memberService.addMember(memberRequest);
+        Member member = memberService.addMember(memberRequest);
+        calendarService.createCalendar(member.getId());
         return ApiResponse.onSuccess(null);
     }
 

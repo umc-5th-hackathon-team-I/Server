@@ -47,7 +47,7 @@ public class MemberService {
         return member.get();
     }
 
-    public boolean addMember(MemberRequest memberRequest){
+    public Member addMember(MemberRequest memberRequest){
         String loginId = memberRequest.getLoginId();
         String nickname = memberRequest.getNickname();
         String pw = memberRequest.getPassword();
@@ -66,7 +66,7 @@ public class MemberService {
 
         Member member = new Member(memberRequest);
 
-        memberRepository.save(member);
+        Member newMember =  memberRepository.save(member);
 
         createReward_Reward(member);
 
@@ -74,7 +74,7 @@ public class MemberService {
             memberRewardRepository.save(MemberReward.createMemberReward(member, SIGNUP_AND_CALENDAR_CREATE));
         }
 
-        return true;
+        return newMember;
     }
 
     public Member login(LoginRequest loginRequest) {
