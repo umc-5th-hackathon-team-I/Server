@@ -18,10 +18,18 @@ public class MemberReward extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
+    @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
     private Reward reward;
+
+    @Builder
+    public MemberReward(Member member, Reward reward) {
+        this.member = member;
+        this.reward = reward;
+    }
+
+    public static MemberReward createMemberReward(Member member, Reward reward) {
+        return new MemberReward(member, reward);
+    }
 }
