@@ -2,6 +2,7 @@ package com.teami.domain.friend.controller;
 
 import com.teami.domain.friend.controller.dto.response.FriendCalendarInfo;
 import com.teami.domain.friend.controller.dto.response.FriendListResponse;
+import com.teami.domain.friend.controller.dto.response.FriendMissionInfo;
 import com.teami.domain.friend.service.FriendService;
 import com.teami.global.apiPayload.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,13 @@ public class FriendController {
     @GetMapping("/calendar/{friendMemberId}")
     public ApiResponse<FriendCalendarInfo> getFriendCalendarInfo(@RequestParam Long memberId, @PathVariable Long friendMemberId) {
         FriendCalendarInfo response = friendService.getCalendarInfo(memberId, friendMemberId);
+        return ApiResponse.onSuccess(response);
+    }
+
+    // 친구 미션 조회
+    @GetMapping("/{friendMemberId}/mission")
+    public ApiResponse<FriendMissionInfo> getFriendMissionList(@RequestParam Long memberId, @PathVariable Long friendMemberId) {
+        FriendMissionInfo response = friendService.getMissionInfo(memberId, friendMemberId);
         return ApiResponse.onSuccess(response);
     }
 }
