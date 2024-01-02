@@ -27,7 +27,6 @@ public enum ErrorStatus implements BaseErrorCode {
     // 캘린더 관련 에러
     CALENDAR_NOT_FINISHED(HttpStatus.BAD_REQUEST, "CALENDAR4001", "이미 수행중인 캘린더가 있습니다."),
 
-
     // 미션 관련 에러
     CREATE_MISSION_FAILED(HttpStatus.BAD_REQUEST, "MISSION4001", "미션 생성에 실패햇습니다."),
     MISSION_NOT_FOUND(HttpStatus.BAD_REQUEST, "MISSION4002", "미션을 찾지 못했습니다."),
@@ -36,9 +35,13 @@ public enum ErrorStatus implements BaseErrorCode {
     NICKNAME_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4003", "이미 존재하는 닉네임 입니다."),
     PASSWORD_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4004", "비밀번호가 일치하지 않습니다."),
 
-    // 친구 확인 에러
-    FRIEND_NOT_FOUND(HttpStatus.BAD_REQUEST, "FRIEND4001", "해당하는 친구가 없습니다"),
-    // 예시,,,
+
+    // 친구 관련 에러
+    SELF_FRIEND_REQUEST_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "FRIEND4001", "본인과 친구 관계를 맺을 수 없습니다."),
+    FRIEND_NOT_FOUND(HttpStatus.NOT_FOUND, "FRIEND4041", "친구 관계를 찾을 수 없습니다."),
+    ALREADY_EXIST_FRIEND(HttpStatus.CONFLICT, "FRIEND4091", "이미 존재하는 친구 관계입니다."),
+
+
     ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4001", "게시글이 없습니다."),
     TEMP_EXCEPTION(HttpStatus.BAD_REQUEST, "TEMP4001", "이거는 테스트"),
     FOOD_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "FOOD4001", "음식이이 없습니다."),

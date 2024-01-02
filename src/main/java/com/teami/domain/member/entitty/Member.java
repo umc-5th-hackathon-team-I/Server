@@ -24,7 +24,7 @@ public class Member extends BaseEntity {
     private String nickname;
 
     @Column(nullable = false)
-    private String pasword;
+    private String password;
 
     @Column(nullable = false)
     private String refreshToken;
@@ -33,7 +33,7 @@ public class Member extends BaseEntity {
     public Member(MemberRequest req){
         this.loginId = req.getLoginId();
         this.nickname = req.getNickname();
-        this.pasword = req.getPassword();
+        this.password = req.getPassword();
         this.refreshToken = "ddddd";
 
     }

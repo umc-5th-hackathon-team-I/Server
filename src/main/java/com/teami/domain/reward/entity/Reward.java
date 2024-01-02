@@ -16,6 +16,6 @@ public class Reward extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String content;
+    @Enumerated(EnumType.STRING)
+    private RewardList rewardList;
 }
