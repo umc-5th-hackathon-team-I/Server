@@ -1,8 +1,6 @@
 package com.teami.domain.mission.entity;
 
 import com.teami.domain.calendar.entitty.Calendar;
-import com.teami.domain.member.entitty.Member;
-import com.teami.domain.mission.entity.Mission;
 import com.teami.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;

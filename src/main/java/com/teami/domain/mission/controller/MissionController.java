@@ -1,6 +1,5 @@
 package com.teami.domain.mission.controller;
 
-import com.teami.domain.mission.dto.request.ChatGPTRequest;
 import com.teami.domain.mission.service.MissionService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/missions")
 public class MissionController {
-
     private final MissionService missionService;
 
     @PostMapping("")
