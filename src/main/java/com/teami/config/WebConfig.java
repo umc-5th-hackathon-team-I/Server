@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:8080", "http://localhost:3000", "https://handyteam.shop")
                 .allowCredentials(true)
                 .allowedHeaders("*")
-                .allowedMethods("*")
+                .allowedMethods("*");
     }
 }
 
