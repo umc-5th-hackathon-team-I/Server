@@ -1,6 +1,5 @@
 package com.teami.domain.member.service;
 
-
 import com.teami.domain.member.dto.LoginRequest;
 import com.teami.domain.member.dto.LoginResponse;
 import com.teami.domain.member.dto.MemberRequest;
@@ -8,14 +7,23 @@ import com.teami.domain.member.entitty.Member;
 import com.teami.domain.member.repository.MemberRepository;
 import com.teami.global.apiPayload.ExceptionHandler;
 import com.teami.global.apiPayload.code.status.ErrorStatus;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
-public class MemberService {
+import java.util.Optional;
 
-    @Autowired
-    private MemberRepository memberRepository;
+@Service
+@RequiredArgsConstructor
+public class MemberService {
+    private final MemberRepository memberRepository;
+
+    public Member findMemberById(Long memberId) {
+        Optional<Member> member = memberRepository.findById(memberId);
+        if (member.isEmpty()) throw new ExceptionHandler(ErrorStatus.MEMBER_NOT_FOUND);
+        return member.get();
+    }
 
     public boolean addMember(MemberRequest memberRequest){
         String loginId = memberRequest.getLoginId();
