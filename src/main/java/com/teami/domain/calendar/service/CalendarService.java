@@ -26,7 +26,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CalendarService {
-
     private final CalendarRepository calendarRepository;
     private final CalendarMissionRepository calendarMissionRepository;
     private final CalendarMapper calendarMapper;
@@ -51,13 +50,11 @@ public class CalendarService {
         } catch (Exception e) {
             throw new ExceptionHandler(ErrorStatus.CREATE_MISSION_FAILED);
         }
-
     }
 
     @Transactional
     public CalendarMissionsResponse getCalendar(Long memberId) {
         Member loginUser = memberService.findMemberById(memberId);
-
 
         Optional<Calendar> calendar = calendarRepository.findByMemberAndIsComplete(loginUser, false);
         if(calendar.isEmpty()) {
@@ -65,7 +62,6 @@ public class CalendarService {
         }
 
         List<CalendarMission> missions = calendarMissionRepository.findAllByCalendarOrderByDate(calendar.get());
-
         return calendarMapper.toCalendarMissionsResponse(calendar.get(), calendarMapper.toCalendarMissionResponseList(missions));
     }
 
@@ -74,20 +70,21 @@ public class CalendarService {
         Member loginUser = memberService.findMemberById(memberId);
         CalendarMission calendarMission = findCalendarMissionById(missionId);
 
-        if(!loginUser.getId().equals(calendarMission.getCalendar().getMember().getId()))
+        if(!loginUser.getId().equals(calendarMission.getCalendar().getMember().getId())) {
             throw new ExceptionHandler(ErrorStatus.NO_AUTHORIZATION);
-
-        if(calendarMission.isComplete()) throw new ExceptionHandler(ErrorStatus.MISSION_ALREADY_COMPLETED);
+        }
+        if(calendarMission.isComplete()) {
+            throw new ExceptionHandler(ErrorStatus.MISSION_ALREADY_COMPLETED);
+        }
 
         calendarMission.completeMission();
-
         return new CalendarMissionIdResponse(calendarMission.getId());
     }
 
     private List<CalendarMissionResponse> toCalendarMissionsResponse(List<NewMissionResponse> missions, Calendar calendar) {
         LocalDate now = LocalDate.now();
         List<CalendarMissionResponse> calendarMissions = new ArrayList<>();
-        for(int i = 0; i< 30;i++) {
+        for(int i = 0; i < 30;i++) {
             calendarMissions.add(toCalendarMissionResponse(missions.get(i), now.plusDays(i), calendar));
         }
         return calendarMissions;
@@ -99,14 +96,14 @@ public class CalendarService {
                         mission.getMission(), date, false, calendar
                 )
         );
-
         return new CalendarMissionResponse(newCalendarMission.getId(), newCalendarMission.getContent(), newCalendarMission.getDate(), newCalendarMission.isComplete());
     }
 
     public CalendarMission findCalendarMissionById(Long missionId) {
         Optional<CalendarMission> calendarMission = calendarMissionRepository.findById(missionId);
-        if(calendarMission.isEmpty()) throw new ExceptionHandler(ErrorStatus.MEMBER_NOT_FOUND);
+        if(calendarMission.isEmpty()) {
+            throw new ExceptionHandler(ErrorStatus.MEMBER_NOT_FOUND);
+        }
         return calendarMission.get();
     }
-
 }
