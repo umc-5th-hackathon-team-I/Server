@@ -29,6 +29,8 @@ public class CalendarVisitor extends BaseEntity {
 
     private String content;
 
+    private boolean isChecked;
+
     public CalendarVisitor(VisitorCommentReq visitorCommentReq, Member owner, Member writer){
         this.owner = owner;
         this.writer = writer;

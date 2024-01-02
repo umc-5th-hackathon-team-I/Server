@@ -3,16 +3,16 @@ package com.teami.domain.member.controller;
 import com.teami.domain.member.dto.request.LoginRequest;
 import com.teami.domain.member.dto.request.MemberRequest;
 import com.teami.domain.member.dto.request.VisitorCommentReq;
+import com.teami.domain.member.dto.response.VisitorCommentRes;
 import com.teami.domain.member.entitty.Member;
 import com.teami.domain.member.service.MemberService;
 import com.teami.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,4 +42,10 @@ public class MemberController {
         return ApiResponse.onSuccess(null);
     }
 
+    @Operation(summary = "방명록 리스트 조회 API")
+    @GetMapping("/visitorComment")
+    public ApiResponse<List<VisitorCommentRes>> addVisitorComment(@RequestParam Long memberId){
+        List<VisitorCommentRes> commentList = memberService.getVisitCommentList(memberId);
+        return ApiResponse.onSuccess(commentList);
+    }
 }
