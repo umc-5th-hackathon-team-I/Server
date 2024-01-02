@@ -33,4 +33,16 @@ public class CalendarMapper {
         return new CalendarMissionsResponse(calendar.getId(), missionResponses);
     }
 
+    public List<CalendarMissionResponse> toCalendarMissionResponseList(List<CalendarMission> missions) {
+        return missions.stream()
+                .map(this::toCalendarMissionResponse)
+                .toList();
+    }
+
+    public CalendarMissionResponse toCalendarMissionResponse(CalendarMission mission) {
+        return new CalendarMissionResponse(
+                mission.getId(), mission.getContent(), mission.getDate(), mission.isComplete()
+        );
+    }
+
 }

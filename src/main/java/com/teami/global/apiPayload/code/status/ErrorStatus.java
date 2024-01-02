@@ -21,6 +21,7 @@ public enum ErrorStatus implements BaseErrorCode {
     // 멤버 관려 에러
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),
     NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
+    NO_AUTHORIZATION(HttpStatus.BAD_REQUEST, "MEMBER4003", "권한이 없습니다."),
 
     // 캘린더 관련 에러
     CALENDAR_NOT_FINISHED(HttpStatus.BAD_REQUEST, "CALENDAR4001", "이미 수행중인 캘린더가 있습니다."),
@@ -28,6 +29,10 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 미션 관련 에러
     CREATE_MISSION_FAILED(HttpStatus.BAD_REQUEST, "MISSION4001", "미션 생성에 실패햇습니다."),
+    MISSION_NOT_FOUND(HttpStatus.BAD_REQUEST, "MISSION4002", "미션을 찾지 못했습니다."),
+    MISSION_DEADLINE_EXCEEDED(HttpStatus.BAD_REQUEST, "MISSION4003", "미션은 당일에만 성공으로 변경 가능합니다.-"),
+    MISSION_ALREADY_COMPLETED(HttpStatus.BAD_REQUEST, "MISSION4004", "이미 성공한 미션입니다."),
+
 
     // 예시,,,
     ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4001", "게시글이 없습니다."),

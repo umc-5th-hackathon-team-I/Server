@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class CalendarIdResponse {
-    private Long calendarId;
+public class CalendarMissionIdResponse {
+    private Long missionId;
 }

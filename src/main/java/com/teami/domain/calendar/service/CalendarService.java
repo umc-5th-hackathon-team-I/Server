@@ -1,6 +1,6 @@
 package com.teami.domain.calendar.service;
 
-import com.teami.domain.calendar.dto.response.CalendarIdResponse;
+import com.teami.domain.calendar.dto.response.CalendarMissionIdResponse;
 import com.teami.domain.calendar.dto.response.CalendarMissionResponse;
 import com.teami.domain.calendar.dto.response.CalendarMissionsResponse;
 import com.teami.domain.calendar.entitty.Calendar;
@@ -16,6 +16,7 @@ import com.teami.global.apiPayload.ExceptionHandler;
 import com.teami.global.apiPayload.code.status.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class CalendarService {
     private final MissionService missionService;
     private final MemberService memberService;
 
+    @Transactional
     public CalendarMissionsResponse createCalendar(Long memberId, LocalDate startDate) {
         Member loginUser = memberService.findMemberById(memberId);
 
@@ -52,6 +54,22 @@ public class CalendarService {
 
     }
 
+    @Transactional
+    public CalendarMissionsResponse getCalendar(Long memberId) {
+        Member loginUser = memberService.findMemberById(memberId);
+
+
+        Optional<Calendar> calendar = calendarRepository.findByMemberAndIsComplete(loginUser, false);
+        if(calendar.isEmpty()) {
+            // TODO : 캘린더가 없는 경우 생성 새로 생성
+        }
+
+        List<CalendarMission> missions = calendarMissionRepository.findAllByCalendarOrderByDate(calendar.get());
+
+        return calendarMapper.toCalendarMissionsResponse(calendar.get(), calendarMapper.toCalendarMissionResponseList(missions));
+    }
+    
+
     private List<CalendarMissionResponse> toCalendarMissionsResponse(List<NewMissionResponse> missions, Calendar calendar) {
         LocalDate now = LocalDate.now();
         List<CalendarMissionResponse> calendarMissions = new ArrayList<>();
@@ -68,6 +86,12 @@ public class CalendarService {
                 )
         );
 
-        return new CalendarMissionResponse(newCalendarMission.getId(), newCalendarMission.getContent(), newCalendarMission.isComplete());
+        return new CalendarMissionResponse(newCalendarMission.getId(), newCalendarMission.getContent(), newCalendarMission.getDate(), newCalendarMission.isComplete());
+    }
+
+    public CalendarMission findCalendarMissionById(Long missionId) {
+        Optional<CalendarMission> calendarMission = calendarMissionRepository.findById(missionId);
+        if(calendarMission.isEmpty()) throw new ExceptionHandler(ErrorStatus.MEMBER_NOT_FOUND);
+        return calendarMission.get();
     }
 }

@@ -32,4 +32,8 @@ public class CalendarMission extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Calendar calendar;
+
+    public void completeMission() {
+        this.isComplete = true;
+    }
 }
