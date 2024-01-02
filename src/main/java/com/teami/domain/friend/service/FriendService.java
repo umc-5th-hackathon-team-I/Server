@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -35,9 +37,29 @@ public class FriendService {
     }
 
     private void validateAlreadyFriend(Long member1Id, Long member2Id) {
-        if (friendRepository.existsByMember1_IdAndAndMember2_Id(member1Id, member2Id) ||
-                friendRepository.existsByMember1_IdAndAndMember2_Id(member2Id, member1Id)) {
+        if (friendRepository.existsByMember1_IdAndMember2_Id(member1Id, member2Id) ||
+                friendRepository.existsByMember1_IdAndMember2_Id(member2Id, member1Id)) {
             throw new ExceptionHandler(ErrorStatus.ALREADY_EXIST_FRIEND);
         }
+    }
+
+    public Friend findFriendByMember1AndMember2(Member member1, Member member2) {
+        Optional<Friend> friend = friendRepository.findFriendByMember1AndMember2(member1, member2);
+        if (friend.isEmpty()) {
+            friend = friendRepository.findFriendByMember1AndMember2(member2, member1);
+        }
+        if (friend.isEmpty()) {
+            throw new ExceptionHandler(ErrorStatus.FRIEND_NOT_FOUND);
+        }
+        return friend.get();
+    }
+
+    @Transactional
+    public void deleteFriend(Long requesterId, Long requestedId) {
+        Member requester = memberService.findById(requesterId);
+        Member requested = memberService.findById(requestedId);
+
+        Friend friend = findFriendByMember1AndMember2(requester, requested);
+        friend.markAsDeleted();
     }
 }
