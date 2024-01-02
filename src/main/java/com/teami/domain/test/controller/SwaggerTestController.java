@@ -4,6 +4,7 @@ import com.teami.domain.test.dto.TestRequest;
 import com.teami.domain.test.dto.TestResponse;
 import com.teami.domain.test.mapper.TestMapper;
 import com.teami.domain.test.service.SwaggerTestService;
+import com.teami.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +21,13 @@ public class SwaggerTestController {
     public void postTestController(@RequestBody TestRequest request) { }
 
     @GetMapping
-    public TestResponse.TestDTO testAPI() {
-        return TestMapper.toTestResponse();
+    public ApiResponse<TestResponse.TestDTO> testAPI() {
+        return ApiResponse.onSuccess(TestMapper.toTestResponse());
     }
 
     @GetMapping("/exception")
-    public TestResponse.TestExceptionDTO exceptionAPI(@RequestParam Integer flag) {
+    public ApiResponse<TestResponse.TestExceptionDTO> exceptionAPI(@RequestParam Integer flag) {
         swaggerTestService.CheckFlag(flag);
-        return TestMapper.toTestExceptionResponse(flag);
+        return ApiResponse.onSuccess(TestMapper.toTestExceptionResponse(flag));
     }
 }
