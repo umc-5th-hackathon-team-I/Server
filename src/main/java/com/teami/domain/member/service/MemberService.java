@@ -126,4 +126,15 @@ public class MemberService {
 
         return res;
     }
+
+    public String checkFirstLetter(Long memberId) {
+        if (memberRepository.findById(memberId).isEmpty()){
+            throw new ExceptionHandler(ErrorStatus.MEMBER_NOT_FOUND);
+        }
+        int check = calendarVisitorRepository.checkFirstLetterByOwnerId(memberId);
+        if (check == 1) {
+            return "first";
+        }
+        return null;
+    }
 }
