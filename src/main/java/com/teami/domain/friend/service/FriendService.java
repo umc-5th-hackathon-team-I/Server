@@ -1,5 +1,8 @@
 package com.teami.domain.friend.service;
 
+import com.teami.domain.calendar.repository.CalendarRepository;
+import com.teami.domain.friend.controller.dto.response.FriendCalendarInfo;
+import com.teami.domain.friend.controller.dto.response.FriendListResponse;
 import com.teami.domain.friend.entity.Friend;
 import com.teami.domain.friend.entity.FriendRepository;
 import com.teami.domain.member.entitty.Member;
@@ -10,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional(readOnly = true)
@@ -18,6 +23,7 @@ import java.util.Optional;
 public class FriendService {
     private final FriendRepository friendRepository;
     private final MemberService memberService;
+    private final CalendarRepository calendarRepository;
 
     @Transactional
     public Long createFriend(Long member1Id, Long member2Id) {
@@ -44,14 +50,16 @@ public class FriendService {
     }
 
     public Friend findFriendByMember1AndMember2(Member member1, Member member2) {
-        Optional<Friend> friend = friendRepository.findFriendByMember1AndMember2(member1, member2);
-        if (friend.isEmpty()) {
-            friend = friendRepository.findFriendByMember1AndMember2(member2, member1);
-        }
-        if (friend.isEmpty()) {
-            throw new ExceptionHandler(ErrorStatus.FRIEND_NOT_FOUND);
-        }
-        return friend.get();
+        return friendRepository.findFriendByMember1AndMember2(member1, member2)
+                .or(() -> friendRepository.findFriendByMember1AndMember2(member2, member1))
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.FRIEND_NOT_FOUND));
+    }
+
+    public List<Long> findFriendsIdByMemberId(Long memberId) {
+        List<Long> list1 = friendRepository.findFriendIdByMember1Id(memberId);
+        List<Long> list2 = friendRepository.findFriendIdByMember2Id(memberId);
+        return Stream.concat(list1.stream(), list2.stream())
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -61,5 +69,24 @@ public class FriendService {
 
         Friend friend = findFriendByMember1AndMember2(requester, requested);
         friend.markAsDeleted();
+    }
+
+    public FriendListResponse getFriendList(Long memberId) {
+        return new FriendListResponse(memberId, findFriendsIdByMemberId(memberId));
+    }
+
+    private void validateFriend(Long member1Id, Long member2Id) {
+        if (!friendRepository.existsByMember1_IdAndMember2_Id(member1Id, member2Id)
+                && !friendRepository.existsByMember1_IdAndMember2_Id(member2Id, member1Id)) {
+            throw new ExceptionHandler(ErrorStatus.FRIEND_NOT_FOUND);
+        }
+    }
+
+    public FriendCalendarInfo getCalendarInfo(Long memberId, Long friendMemberId) {
+        validateFriend(memberId, friendMemberId);
+        Member friendMember = memberService.findById(friendMemberId);
+
+        Long calendarId = calendarRepository.findByMemberAndIsComplete(friendMember, false).get().getId();
+        return new FriendCalendarInfo(memberId, friendMemberId, calendarId);
     }
 }

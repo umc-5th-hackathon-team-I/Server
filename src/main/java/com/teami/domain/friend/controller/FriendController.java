@@ -1,5 +1,7 @@
 package com.teami.domain.friend.controller;
 
+import com.teami.domain.friend.controller.dto.response.FriendCalendarInfo;
+import com.teami.domain.friend.controller.dto.response.FriendListResponse;
 import com.teami.domain.friend.service.FriendService;
 import com.teami.global.apiPayload.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +25,19 @@ public class FriendController {
     public ApiResponse<Void> deleteFriend(@PathVariable Long requesterId, @PathVariable Long requestedId) {
         friendService.deleteFriend(requesterId, requestedId);
         return ApiResponse.onSuccess(null);
+    }
+
+    // 친구 목록 조회
+    @GetMapping("/list")
+    public ApiResponse<FriendListResponse> getFriendList(@RequestParam Long memberId) {
+        FriendListResponse response = friendService.getFriendList(memberId);
+        return ApiResponse.onSuccess(response);
+    }
+
+    // 친구 캘린더 아이디 조회
+    @GetMapping("/calendar/{friendMemberId}")
+    public ApiResponse<FriendCalendarInfo> getFriendCalendarInfo(@RequestParam Long memberId, @PathVariable Long friendMemberId) {
+        FriendCalendarInfo response = friendService.getCalendarInfo(memberId, friendMemberId);
+        return ApiResponse.onSuccess(response);
     }
 }

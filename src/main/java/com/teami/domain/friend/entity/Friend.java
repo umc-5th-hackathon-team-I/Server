@@ -8,6 +8,7 @@ import org.hibernate.annotations.Where;
 
 @Getter
 @Entity
+@Table(name = "friend")
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
