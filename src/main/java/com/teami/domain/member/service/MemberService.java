@@ -121,7 +121,8 @@ public class MemberService {
         if(v.isEmpty()){
             throw new ExceptionHandler(ErrorStatus.VISITOR_NOT_FOUND);
         }
-        VisitorCommentRes res = new VisitorCommentRes(v.get());
+
+        VisitorCommentRes res = new VisitorCommentRes(v.get(), true);
 
         return res;
     }

@@ -27,4 +27,13 @@ public class VisitorCommentRes {
         this.isChecked = c.isChecked();
 
     }
+    public VisitorCommentRes(CalendarVisitor c, boolean isChecked){
+        this.id = c.getId();
+        this.ownerId = c.getOwner().getId();
+        this.writerId = c.getWriter().getId();
+        this.content = c.getContent();
+        this.writerNickname = c.getWriter().getNickname();
+        this.isChecked = isChecked;
+
+    }
 }
