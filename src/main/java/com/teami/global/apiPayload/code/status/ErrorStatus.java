@@ -22,6 +22,13 @@ public enum ErrorStatus implements BaseErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),
     NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
 
+    // 캘린더 관련 에러
+    CALENDAR_NOT_FINISHED(HttpStatus.BAD_REQUEST, "CALENDAR4001", "이미 수행중인 캘린더가 있습니다."),
+
+
+    // 미션 관련 에러
+    CREATE_MISSION_FAILED(HttpStatus.BAD_REQUEST, "MISSION4001", "미션 생성에 실패햇습니다."),
+
     // 예시,,,
     ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4001", "게시글이 없습니다."),
     TEMP_EXCEPTION(HttpStatus.BAD_REQUEST, "TEMP4001", "이거는 테스트"),

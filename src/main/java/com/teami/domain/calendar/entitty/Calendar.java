@@ -19,6 +19,9 @@ public class Calendar extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private boolean isComplete;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Member member;
