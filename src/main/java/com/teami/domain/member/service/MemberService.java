@@ -1,7 +1,11 @@
 package com.teami.domain.member.service;
 
-import com.teami.domain.member.dto.LoginRequest;
-import com.teami.domain.member.dto.MemberRequest;
+import com.teami.domain.calendar.entitty.CalendarVisitor;
+import com.teami.domain.calendar.repository.CalendarVisitorRepository;
+import com.teami.domain.friend.repository.FriendRepository;
+import com.teami.domain.member.dto.request.LoginRequest;
+import com.teami.domain.member.dto.request.MemberRequest;
+import com.teami.domain.member.dto.request.VisitorCommentReq;
 import com.teami.domain.member.entitty.Member;
 import com.teami.domain.member.repository.MemberRepository;
 import com.teami.global.apiPayload.ExceptionHandler;
@@ -15,6 +19,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final FriendRepository friendRepository;
+    private final CalendarVisitorRepository calendarVisitorRepository;
 
     public Member findMemberById(Long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
@@ -74,6 +80,26 @@ public class MemberService {
         }
         else{
             throw new ExceptionHandler(ErrorStatus.MEMBER_NOT_FOUND);
+        }
+    }
+
+    public Boolean addVisitorComment(VisitorCommentReq visitorCommentReq) {
+
+
+        Optional<Member> writer = memberRepository.findById(visitorCommentReq.getWriterId());
+        Optional<Member> owner = memberRepository.findById(visitorCommentReq.getOwnerId());
+
+        if(writer.isEmpty() || owner.isEmpty()){
+            throw new ExceptionHandler(ErrorStatus.FRIEND_NOT_FOUND);
+        }
+
+        if(friendRepository.findFriendByMember1AndMember2(owner.get(),writer.get()).isEmpty()){
+            throw new ExceptionHandler(ErrorStatus.FRIEND_NOT_FOUND);
+        }
+        else{
+            CalendarVisitor calendarVisitor = new CalendarVisitor(visitorCommentReq, owner.get(),writer.get());
+            calendarVisitorRepository.save(calendarVisitor);
+            return true;
         }
     }
 }

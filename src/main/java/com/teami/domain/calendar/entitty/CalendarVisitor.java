@@ -1,6 +1,7 @@
 package com.teami.domain.calendar.entitty;
 
 
+import com.teami.domain.member.dto.request.VisitorCommentReq;
 import com.teami.domain.member.entitty.Member;
 import com.teami.global.common.BaseEntity;
 import jakarta.persistence.*;
@@ -20,12 +21,18 @@ public class CalendarVisitor extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
-    private Member member;
+    private Member owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
-    private Calendar calendar;
+    private Member writer;
 
     private String content;
 
+    public CalendarVisitor(VisitorCommentReq visitorCommentReq, Member owner, Member writer){
+        this.owner = owner;
+        this.writer = writer;
+        this.content = visitorCommentReq.getContent();
+
+    }
 }
