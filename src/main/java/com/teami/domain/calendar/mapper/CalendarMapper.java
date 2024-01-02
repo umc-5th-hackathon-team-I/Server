@@ -29,8 +29,8 @@ public class CalendarMapper {
                 .build();
     }
 
-    public CalendarMissionsResponse toCalendarMissionsResponse(Calendar calendar, List<CalendarMissionResponse> missionResponses) {
-        return new CalendarMissionsResponse(calendar.getId(), missionResponses);
+    public CalendarMissionsResponse toCalendarMissionsResponse(Member member, Calendar calendar, List<CalendarMissionResponse> missionResponses) {
+        return new CalendarMissionsResponse(calendar.getId(), member.getNickname(),  missionResponses);
     }
 
     public List<CalendarMissionResponse> toCalendarMissionResponseList(List<CalendarMission> missions) {

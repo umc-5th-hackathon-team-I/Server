@@ -35,7 +35,7 @@ public class CalendarService {
     private final RewardService rewardService;
 
     @Transactional
-    public CalendarMissionsResponse createCalendar(Long memberId, LocalDate startDate) {
+    public CalendarMissionsResponse createCalendar(Long memberId) {
         Member loginUser = memberService.findMemberById(memberId);
 
         // 이전 캘린더가 다 수행되지 않았을 경우 예외 처리
@@ -47,7 +47,7 @@ public class CalendarService {
         // 캘린더 내의 모든 미션들 생성
         try {
             List<NewMissionResponse> missions = missionService.generateMission();
-            return calendarMapper.toCalendarMissionsResponse(newCalendar, toCalendarMissionsResponse(missions, newCalendar));
+            return calendarMapper.toCalendarMissionsResponse(loginUser, newCalendar, toCalendarMissionsResponse(loginUser, missions, newCalendar));
 
         } catch (Exception e) {
             throw new ExceptionHandler(ErrorStatus.CREATE_MISSION_FAILED);
@@ -64,7 +64,7 @@ public class CalendarService {
         }
 
         List<CalendarMission> missions = calendarMissionRepository.findAllByCalendarOrderByDate(calendar.get());
-        return calendarMapper.toCalendarMissionsResponse(calendar.get(), calendarMapper.toCalendarMissionResponseList(missions));
+        return calendarMapper.toCalendarMissionsResponse(loginUser, calendar.get(), calendarMapper.toCalendarMissionResponseList(missions));
     }
 
     @Transactional
@@ -87,7 +87,7 @@ public class CalendarService {
         return new CalendarMissionIdResponse(calendarMission.getId());
     }
 
-    private List<CalendarMissionResponse> toCalendarMissionsResponse(List<NewMissionResponse> missions, Calendar calendar) {
+    private List<CalendarMissionResponse> toCalendarMissionsResponse(Member member, List<NewMissionResponse> missions, Calendar calendar) {
         LocalDate now = LocalDate.now();
         List<CalendarMissionResponse> calendarMissions = new ArrayList<>();
         for(int i = 0; i < 30;i++) {

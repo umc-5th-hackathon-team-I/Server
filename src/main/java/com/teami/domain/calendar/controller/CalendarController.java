@@ -20,8 +20,8 @@ public class CalendarController {
 
     @PostMapping
     @Operation(summary = "캘린더 생성 API")
-    public ApiResponse<CalendarMissionsResponse> createCalendar(@RequestParam Long memberId, @RequestParam LocalDate startDate) {
-        return ApiResponse.onSuccess(calendarService.createCalendar(memberId, startDate));
+    public ApiResponse<CalendarMissionsResponse> createCalendar(@RequestParam Long memberId) {
+        return ApiResponse.onSuccess(calendarService.createCalendar(memberId));
     }
 
     @GetMapping

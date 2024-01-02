@@ -9,5 +9,6 @@ import java.util.List;
 @AllArgsConstructor
 public class CalendarMissionsResponse {
     private Long calenderId;
+    private String nickname;
     private List<CalendarMissionResponse> missions;
 }
