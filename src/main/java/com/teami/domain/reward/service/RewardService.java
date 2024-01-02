@@ -1,5 +1,6 @@
 package com.teami.domain.reward.service;
 
+import com.teami.domain.calendar.entitty.Calendar;
 import com.teami.domain.calendar.entitty.CalendarMission;
 import com.teami.domain.calendar.repository.CalendarMissionRepository;
 import com.teami.domain.calendar.repository.CalendarRepository;
@@ -41,7 +42,9 @@ public class RewardService {
         List<CalendarMission> calendarMissionList = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             now = now.minusDays(1);
-            calendarMissionList.add(calendarMissionRepository.findCalendarMissionByCalendarIdAndDate(calendarId, now));
+            CalendarMission calendarMission = calendarMissionRepository.findCalendarMissionByCalendarIdAndDate(calendarId, now);
+            if(calendarMission != null)
+                calendarMissionList.add(calendarMission);
         }
 
         return calendarMissionList;
@@ -52,6 +55,8 @@ public class RewardService {
         if (!memberRewardRepository.existsByMemberAndReward(member, COMPLETE_FIVE_MISSION)) {
             Long calendarId = calendarRepository.findByMemberAndIsComplete(member, false).get().getId();
             List<CalendarMission> calendarMissions = find5CalendarMissions(calendarId, LocalDate.now());
+
+            if(calendarMissions.size() != 5) return null;
 
             for (int i = 0; i < 5; i++) {
                 if (calendarMissions.get(i).isComplete() == false) {
