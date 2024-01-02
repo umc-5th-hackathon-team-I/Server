@@ -1,4 +1,4 @@
-package com.teami.domain.member.dto;
+package com.teami.domain.member.dto.request;
 
 import com.teami.domain.member.entitty.Member;
 import lombok.Builder;

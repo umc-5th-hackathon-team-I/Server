@@ -1,6 +1,6 @@
 package com.teami.domain.member.entitty;
 
-import com.teami.domain.member.dto.MemberRequest;
+import com.teami.domain.member.dto.request.MemberRequest;
 import com.teami.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
