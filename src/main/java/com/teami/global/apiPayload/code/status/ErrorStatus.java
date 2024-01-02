@@ -20,6 +20,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 멤버 관려 에러
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),
+    MEMBER_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "이미 존재하는 아이디 입니다."),
     NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
     NO_AUTHORIZATION(HttpStatus.BAD_REQUEST, "MEMBER4003", "권한이 없습니다."),
 
@@ -32,6 +33,8 @@ public enum ErrorStatus implements BaseErrorCode {
     MISSION_NOT_FOUND(HttpStatus.BAD_REQUEST, "MISSION4002", "미션을 찾지 못했습니다."),
     MISSION_DEADLINE_EXCEEDED(HttpStatus.BAD_REQUEST, "MISSION4003", "미션은 당일에만 성공으로 변경 가능합니다.-"),
     MISSION_ALREADY_COMPLETED(HttpStatus.BAD_REQUEST, "MISSION4004", "이미 성공한 미션입니다."),
+    NICKNAME_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4003", "이미 존재하는 닉네임 입니다."),
+    PASSWORD_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4004", "비밀번호가 일치하지 않습니다."),
 
 
     // 예시,,,
