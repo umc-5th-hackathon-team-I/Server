@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface MemberRewardRepository extends JpaRepository<MemberReward, Long> {
     List<RewardResponse> findByMemberId(Long MemberId);
-
     boolean existsByMemberAndReward(Member member, Reward reward);
+    Long countMemberRewardByMember(Member member);
 }

@@ -12,6 +12,7 @@ import com.teami.domain.member.entitty.Member;
 import com.teami.domain.member.service.MemberService;
 import com.teami.domain.mission.dto.response.NewMissionResponse;
 import com.teami.domain.mission.service.MissionService;
+import com.teami.domain.reward.service.RewardService;
 import com.teami.global.apiPayload.ExceptionHandler;
 import com.teami.global.apiPayload.code.status.ErrorStatus;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class CalendarService {
     private final CalendarMapper calendarMapper;
     private final MissionService missionService;
     private final MemberService memberService;
+    private final RewardService rewardService;
 
     @Transactional
     public CalendarMissionsResponse createCalendar(Long memberId, LocalDate startDate) {
@@ -78,6 +80,10 @@ public class CalendarService {
         }
 
         calendarMission.completeMission();
+
+        rewardService.createReward_Mission1(loginUser);
+        rewardService.createReward_Mission2(loginUser);
+
         return new CalendarMissionIdResponse(calendarMission.getId());
     }
 
@@ -105,5 +111,19 @@ public class CalendarService {
             throw new ExceptionHandler(ErrorStatus.MEMBER_NOT_FOUND);
         }
         return calendarMission.get();
+    }
+
+    public CalendarMission findCalendarMissionByCalendarIdAndDate(Long calendarId, LocalDate date) {
+        return calendarMissionRepository.findCalendarMissionByCalendarIdAndDate(calendarId, date);
+    }
+
+    public List<CalendarMission> find5CalendarMissions(Long calendarId, LocalDate now) {
+        List<CalendarMission> calendarMissionList = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            now = now.minusDays(1);
+            calendarMissionList.add(calendarMissionRepository.findCalendarMissionByCalendarIdAndDate(calendarId, now));
+        }
+
+        return calendarMissionList;
     }
 }
