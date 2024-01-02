@@ -44,8 +44,15 @@ public class MemberController {
 
     @Operation(summary = "방명록 리스트 조회 API")
     @GetMapping("/visitorComment")
-    public ApiResponse<List<VisitorCommentRes>> addVisitorComment(@RequestParam Long memberId){
+    public ApiResponse<List<VisitorCommentRes>> getVisitCommentList(@RequestParam Long memberId){
         List<VisitorCommentRes> commentList = memberService.getVisitCommentList(memberId);
         return ApiResponse.onSuccess(commentList);
+    }
+
+    @Operation(summary = "방명록 상세 조회 API")
+    @GetMapping("/visitorCommentDetail")
+    public ApiResponse<VisitorCommentRes> getVisitComment(@RequestParam Long memberId, @RequestParam Long calendarVisitorId){
+        VisitorCommentRes comment = memberService.getVisitComment(memberId,calendarVisitorId);
+        return ApiResponse.onSuccess(comment);
     }
 }

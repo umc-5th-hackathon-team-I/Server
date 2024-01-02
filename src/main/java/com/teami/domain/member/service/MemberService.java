@@ -120,4 +120,17 @@ public class MemberService {
         return  dtoList;
 
     }
+
+    public VisitorCommentRes getVisitComment(Long memberId, Long calendarVisitorId) {
+        if(memberRepository.findById(memberId).isEmpty()){
+            throw new ExceptionHandler(ErrorStatus.MEMBER_NOT_FOUND);
+        }
+        Optional<CalendarVisitor> v = calendarVisitorRepository.findById(calendarVisitorId);
+        if(v.isEmpty()){
+            throw new ExceptionHandler(ErrorStatus.VISITOR_NOT_FOUND);
+        }
+        VisitorCommentRes res = new VisitorCommentRes(v.get());
+
+        return res;
+    }
 }
