@@ -1,8 +1,12 @@
 package com.teami.domain.friend.service;
 
+import com.teami.domain.calendar.entitty.Calendar;
+import com.teami.domain.calendar.entitty.CalendarMission;
+import com.teami.domain.calendar.repository.CalendarMissionRepository;
 import com.teami.domain.calendar.repository.CalendarRepository;
 import com.teami.domain.friend.controller.dto.response.FriendCalendarInfo;
 import com.teami.domain.friend.controller.dto.response.FriendListResponse;
+import com.teami.domain.friend.controller.dto.response.FriendMissionInfo;
 import com.teami.domain.friend.entity.Friend;
 import com.teami.domain.friend.repository.FriendRepository;
 import com.teami.domain.member.entitty.Member;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -24,6 +29,7 @@ public class FriendService {
     private final FriendRepository friendRepository;
     private final MemberService memberService;
     private final CalendarRepository calendarRepository;
+    private final CalendarMissionRepository calendarMissionRepository;
 
     @Transactional
     public Long createFriend(Long member1Id, Long member2Id) {
@@ -88,5 +94,16 @@ public class FriendService {
 
         Long calendarId = calendarRepository.findByMemberAndIsComplete(friendMember, false).get().getId();
         return new FriendCalendarInfo(memberId, friendMemberId, calendarId);
+    }
+
+    public FriendMissionInfo getMissionInfo(Long memberId, Long friendMemberId) {
+        validateFriend(memberId, friendMemberId);
+        Member friendMember = memberService.findById(friendMemberId);
+
+        Optional<Calendar> calendar = calendarRepository.findByMemberAndIsComplete(friendMember, false);
+        List<CalendarMission> friendMissions = calendarMissionRepository.findAllByCalendarOrderByDate(calendar.get());
+
+        FriendMissionInfo friendMissionInfo = new FriendMissionInfo(memberId, friendMemberId, friendMissions);
+        return friendMissionInfo;
     }
 }
