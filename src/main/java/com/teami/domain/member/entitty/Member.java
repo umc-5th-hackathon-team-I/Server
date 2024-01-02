@@ -33,7 +33,7 @@ public class Member extends BaseEntity {
     public Member(MemberRequest req){
         this.loginId = req.getLoginId();
         this.nickname = req.getNickname();
-        this.pasword = req.getPassword();
+        this.password = req.getPassword();
         this.refreshToken = "ddddd";
 
     }
