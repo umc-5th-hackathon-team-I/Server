@@ -1,7 +1,6 @@
 package com.teami.domain.member.controller;
 
 import com.teami.domain.member.dto.LoginRequest;
-import com.teami.domain.member.dto.LoginResponse;
 import com.teami.domain.member.dto.MemberRequest;
 import com.teami.domain.member.entitty.Member;
 import com.teami.domain.member.service.MemberService;

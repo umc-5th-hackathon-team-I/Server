@@ -12,8 +12,6 @@ import org.hibernate.annotations.Where;
 @AllArgsConstructor
 @Where(clause = "deleted_at is null")
 public class Mission extends BaseEntity {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

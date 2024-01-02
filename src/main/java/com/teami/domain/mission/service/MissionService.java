@@ -19,7 +19,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MissionService {
-
     @Value("${chat.api}")
     private String API_KEY;
 
@@ -27,7 +26,6 @@ public class MissionService {
     private String comment;
 
     private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
-
 
     public List<NewMissionResponse> generateMission() throws Exception {
         List<ChatRequest> messages = new ArrayList<>();

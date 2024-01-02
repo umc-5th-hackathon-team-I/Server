@@ -1,15 +1,12 @@
 package com.teami.domain.member.service;
 
 import com.teami.domain.member.dto.LoginRequest;
-import com.teami.domain.member.dto.LoginResponse;
 import com.teami.domain.member.dto.MemberRequest;
 import com.teami.domain.member.entitty.Member;
 import com.teami.domain.member.repository.MemberRepository;
 import com.teami.global.apiPayload.ExceptionHandler;
 import com.teami.global.apiPayload.code.status.ErrorStatus;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
