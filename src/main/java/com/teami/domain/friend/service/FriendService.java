@@ -10,6 +10,7 @@ import com.teami.domain.friend.controller.dto.response.FriendMissionInfo;
 import com.teami.domain.friend.entity.Friend;
 import com.teami.domain.friend.repository.FriendRepository;
 import com.teami.domain.member.entitty.Member;
+import com.teami.domain.member.repository.MemberRepository;
 import com.teami.domain.member.service.MemberService;
 import com.teami.global.apiPayload.ExceptionHandler;
 import com.teami.global.apiPayload.code.status.ErrorStatus;
@@ -29,6 +30,7 @@ public class FriendService {
     private final FriendRepository friendRepository;
     private final MemberService memberService;
     private final CalendarRepository calendarRepository;
+    private final MemberRepository memberRepository;
     private final CalendarMissionRepository calendarMissionRepository;
 
     @Transactional
