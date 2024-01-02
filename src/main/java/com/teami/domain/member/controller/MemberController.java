@@ -28,10 +28,8 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
-
-    @Autowired
-    private MemberService memberService;
-    private CalendarService calendarService;
+    private final MemberService memberService;
+    private final CalendarService calendarService;
 
     @PostMapping("/signup")
     public ApiResponse<MemberIdResponse> addMember(@RequestBody MemberRequest memberRequest){
