@@ -9,6 +9,9 @@ import com.teami.domain.member.dto.request.VisitorCommentReq;
 import com.teami.domain.member.dto.response.VisitorCommentRes;
 import com.teami.domain.member.entitty.Member;
 import com.teami.domain.member.repository.MemberRepository;
+import com.teami.domain.reward.entity.MemberReward;
+import com.teami.domain.reward.entity.Reward;
+import com.teami.domain.reward.repository.MemberRewardRepository;
 import com.teami.domain.reward.service.RewardService;
 import com.teami.global.apiPayload.ExceptionHandler;
 import com.teami.global.apiPayload.code.status.ErrorStatus;
@@ -19,13 +22,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.teami.domain.reward.entity.Reward.*;
+import static com.teami.domain.reward.entity.Reward.SIGNUP_AND_CALENDAR_CREATE;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
     private final FriendRepository friendRepository;
     private final CalendarVisitorRepository calendarVisitorRepository;
-    private final RewardService rewardService;
+    private final MemberRewardRepository memberRewardRepository;
 
     public Member findMemberById(Long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
@@ -61,7 +67,13 @@ public class MemberService {
         Member member = new Member(memberRequest);
 
         memberRepository.save(member);
-        rewardService.createReward_Member(member);
+
+        createReward_Reward(member);
+
+        if (!memberRewardRepository.existsByMemberAndReward(member, SIGNUP_AND_CALENDAR_CREATE)) {
+            memberRewardRepository.save(MemberReward.createMemberReward(member, SIGNUP_AND_CALENDAR_CREATE));
+        }
+
         return true;
     }
 
@@ -134,6 +146,15 @@ public class MemberService {
         int check = calendarVisitorRepository.checkFirstLetterByOwnerId(memberId);
         if (check == 1) {
             return "first";
+        }
+        return null;
+    }
+    private Reward createReward_Reward(Member member) {
+        if (!memberRewardRepository.existsByMemberAndReward(member, COMPLETE_FIRST_MISSION)) {
+            if (memberRewardRepository.countMemberRewardByMember(member) == 0L) {
+                memberRewardRepository.save(MemberReward.createMemberReward(member, EARN_FIVE_REWARDS));
+                return EARN_FIVE_REWARDS;
+            }
         }
         return null;
     }

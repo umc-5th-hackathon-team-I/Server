@@ -82,15 +82,7 @@ public class RewardService {
         return null;
     }
 
-    public Reward createReward_Reward(Member member) {
-        if (!memberRewardRepository.existsByMemberAndReward(member, COMPLETE_FIRST_MISSION)) {
-            if (memberRewardRepository.countMemberRewardByMember(member) == 0L) {
-                memberRewardRepository.save(MemberReward.createMemberReward(member, EARN_FIVE_REWARDS));
-                return EARN_FIVE_REWARDS;
-            }
-        }
-        return null;
-    }
+
 
     public Reward createReward_Friend1(Member member) {
 
@@ -115,5 +107,15 @@ public class RewardService {
 
     public List<RewardResponse> getMyRewardList(Long memberId) {
         return memberRewardRepository.findByMemberId(memberId);
+    }
+
+    private Reward createReward_Reward(Member member) {
+        if (!memberRewardRepository.existsByMemberAndReward(member, COMPLETE_FIRST_MISSION)) {
+            if (memberRewardRepository.countMemberRewardByMember(member) == 0L) {
+                memberRewardRepository.save(MemberReward.createMemberReward(member, EARN_FIVE_REWARDS));
+                return EARN_FIVE_REWARDS;
+            }
+        }
+        return null;
     }
 }
