@@ -1,8 +1,10 @@
 package com.teami.domain.mission.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teami.domain.mission.dto.request.ChatGPTRequest;
 import com.teami.domain.mission.dto.request.ChatRequest;
+import com.teami.domain.mission.dto.response.NewMissionResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,12 +22,16 @@ public class MissionService {
 
     @Value("${chat.api}")
     private String API_KEY;
+
+    @Value("${chat.comment}")
+    private String comment;
+
     private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 
 
-    public String generateMission(String prompt) throws Exception {
+    public List<NewMissionResponse> generateMission() throws Exception {
         List<ChatRequest> messages = new ArrayList<>();
-        messages.add(new ChatRequest("user", prompt));
+        messages.add(new ChatRequest("user", comment));
         ChatGPTRequest chatGPTRequest = new ChatGPTRequest("gpt-4", messages);
 
         HttpClient client = HttpClient.newHttpClient();
@@ -39,8 +45,34 @@ public class MissionService {
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
 
+
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        return response.body();
+        // 응답 본문을 JSON으로 파싱
+        JsonNode responseJson = mapper.readTree(response.body());
+
+        // 'choices' 배열에서 첫 번째 항목의 'message' 객체를 가져옴
+        JsonNode message = responseJson.get("choices").get(0).get("message");
+
+        // 'message' 객체에서 'content' 필드를 가져옴
+        String content = message.get("content").asText();
+
+        // content에서 일자와 미션을 추출하여 Mission 객체로 만들고 리스트에 추가
+        List<NewMissionResponse> missions = parseMissionFromContent(content);
+
+        return missions;
+    }
+
+    public List<NewMissionResponse> parseMissionFromContent(String content) {
+        List<NewMissionResponse> missions = new ArrayList<>();
+        String[] lines = content.split("\n");
+        for (String line : lines) {
+            if (line.contains(":")) {
+                String[] parts = line.split(":");
+                String mission = parts[1].trim();
+                missions.add(new NewMissionResponse(mission));
+            }
+        }
+        return missions;
     }
 }

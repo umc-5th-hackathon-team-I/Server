@@ -1,5 +1,6 @@
 package com.teami.domain.member.entitty;
 
+import com.teami.domain.member.dto.MemberRequest;
 import com.teami.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,8 +24,17 @@ public class Member extends BaseEntity {
     private String nickname;
 
     @Column(nullable = false)
-    private String pasword;
+    private String password;
 
     @Column(nullable = false)
     private String refreshToken;
+
+
+    public Member(MemberRequest req){
+        this.loginId = req.getLoginId();
+        this.nickname = req.getNickname();
+        this.password = req.getPassword();
+        this.refreshToken = "ddddd";
+
+    }
 }

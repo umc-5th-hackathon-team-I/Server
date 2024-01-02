@@ -5,7 +5,6 @@ import com.teami.domain.test.dto.TestResponse;
 import com.teami.domain.test.mapper.TestMapper;
 import com.teami.domain.test.service.SwaggerTestService;
 import com.teami.global.apiPayload.ApiResponse;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/test")
 @RequiredArgsConstructor
 public class SwaggerTestController {
-
     private final SwaggerTestService swaggerTestService;
+
     @PostMapping
-    public void postTestController(@RequestBody TestRequest request) { }
+    public void postTestController(@RequestBody TestRequest request) {
+        // pass
+    }
 
     @GetMapping
     public ApiResponse<TestResponse.TestDTO> testAPI() {
