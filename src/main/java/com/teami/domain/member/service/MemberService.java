@@ -6,6 +6,7 @@ import com.teami.domain.friend.repository.FriendRepository;
 import com.teami.domain.member.dto.request.LoginRequest;
 import com.teami.domain.member.dto.request.MemberRequest;
 import com.teami.domain.member.dto.request.VisitorCommentReq;
+import com.teami.domain.member.dto.response.VisitorCommentRes;
 import com.teami.domain.member.entitty.Member;
 import com.teami.domain.member.repository.MemberRepository;
 import com.teami.domain.reward.service.RewardService;
@@ -14,6 +15,8 @@ import com.teami.global.apiPayload.code.status.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -85,5 +88,33 @@ public class MemberService {
             calendarVisitorRepository.save(calendarVisitor);
             return true;
         }
+    }
+
+    public List<VisitorCommentRes> getVisitCommentList(Long memberId) {
+        if(memberRepository.findById(memberId).isEmpty()){
+            throw new ExceptionHandler(ErrorStatus.MEMBER_NOT_FOUND);
+        }
+        List<CalendarVisitor> list = calendarVisitorRepository.findByOwnerId(memberId);
+
+        List<VisitorCommentRes> dtoList = new ArrayList<>();
+
+        for(CalendarVisitor l: list){
+            dtoList.add(new VisitorCommentRes(l));
+        }
+        return  dtoList;
+
+    }
+
+    public VisitorCommentRes getVisitComment(Long memberId, Long calendarVisitorId) {
+        if(memberRepository.findById(memberId).isEmpty()){
+            throw new ExceptionHandler(ErrorStatus.MEMBER_NOT_FOUND);
+        }
+        Optional<CalendarVisitor> v = calendarVisitorRepository.findById(calendarVisitorId);
+        if(v.isEmpty()){
+            throw new ExceptionHandler(ErrorStatus.VISITOR_NOT_FOUND);
+        }
+        VisitorCommentRes res = new VisitorCommentRes(v.get());
+
+        return res;
     }
 }
