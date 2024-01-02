@@ -16,17 +16,14 @@ import org.springframework.web.bind.annotation.*;
 public class SwaggerTestController {
 
     private final SwaggerTestService swaggerTestService;
-    @Hidden
     @PostMapping
     public void postTestController(@RequestBody TestRequest request) { }
 
-    @Hidden
     @GetMapping
     public TestResponse.TestDTO testAPI() {
         return TestMapper.toTestResponse();
     }
 
-    @Hidden
     @GetMapping("/exception")
     public TestResponse.TestExceptionDTO exceptionAPI(@RequestParam Integer flag) {
         swaggerTestService.CheckFlag(flag);
