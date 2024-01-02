@@ -2,7 +2,6 @@ package com.teami.domain.reward.repository;
 
 import com.teami.domain.reward.dto.RewardResponse;
 import com.teami.domain.reward.entity.MemberReward;
-import com.teami.domain.reward.entity.Reward;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

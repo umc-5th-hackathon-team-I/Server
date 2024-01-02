@@ -4,7 +4,7 @@ import com.teami.domain.calendar.repository.CalendarRepository;
 import com.teami.domain.friend.controller.dto.response.FriendCalendarInfo;
 import com.teami.domain.friend.controller.dto.response.FriendListResponse;
 import com.teami.domain.friend.entity.Friend;
-import com.teami.domain.friend.entity.FriendRepository;
+import com.teami.domain.friend.repository.FriendRepository;
 import com.teami.domain.member.entitty.Member;
 import com.teami.domain.member.service.MemberService;
 import com.teami.global.apiPayload.ExceptionHandler;

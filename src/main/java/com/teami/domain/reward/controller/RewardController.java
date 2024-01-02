@@ -1,7 +1,6 @@
 package com.teami.domain.reward.controller;
 
 import com.teami.domain.reward.dto.RewardResponse;
-import com.teami.domain.reward.entity.MemberReward;
 import com.teami.domain.reward.service.RewardService;
 import com.teami.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
