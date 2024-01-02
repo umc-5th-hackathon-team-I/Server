@@ -9,6 +9,7 @@ import com.teami.domain.member.dto.request.VisitorCommentReq;
 import com.teami.domain.member.dto.response.VisitorCommentRes;
 import com.teami.domain.member.entitty.Member;
 import com.teami.domain.member.repository.MemberRepository;
+import com.teami.domain.reward.service.RewardService;
 import com.teami.global.apiPayload.ExceptionHandler;
 import com.teami.global.apiPayload.code.status.ErrorStatus;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final FriendRepository friendRepository;
     private final CalendarVisitorRepository calendarVisitorRepository;
+    private final RewardService rewardService;
 
     public Member findMemberById(Long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
@@ -44,25 +46,18 @@ public class MemberService {
         String nickname = memberRequest.getNickname();
         String pw = memberRequest.getPassword();
 
-        //pw 암호화하는 과정 필요!!!!!!!!!!
-
-        //아이디가 존재하면
         if(memberRepository.findMemberByLoginId(loginId) != null){
             throw new ExceptionHandler(ErrorStatus.MEMBER_FOUND);
         }
-        //닉네임이 존재하면
         else if(memberRepository.findMemberByNickname(nickname) != null){
             throw new ExceptionHandler(ErrorStatus.NICKNAME_EXIST);
         }
 
-
         Member member = new Member(memberRequest);
-
         memberRepository.save(member);
-
+        rewardService.createReward_Member(member);
         return true;
     }
-
 
     public Member login(LoginRequest loginRequest) {
         String loginId = loginRequest.getLoginId();
@@ -72,34 +67,23 @@ public class MemberService {
         Member existMember = memberRepository.findMemberByLoginId(loginId);
         System.out.println(existMember);
 
-
-        if(existMember != null){
-            if(pw.equals(existMember.getPassword())){
-                return existMember;
-            }
-            else{
-                throw new ExceptionHandler(ErrorStatus.PASSWORD_NOT_FOUND);
-            }
-        }
-        else{
-            throw new ExceptionHandler(ErrorStatus.MEMBER_NOT_FOUND);
-        }
+        return Optional.ofNullable(existMember)
+                .filter(member -> pw.equals(member.getPassword()))
+                .orElseThrow(() -> new ExceptionHandler(existMember != null ? ErrorStatus.PASSWORD_NOT_FOUND : ErrorStatus.MEMBER_NOT_FOUND));
     }
 
     public Boolean addVisitorComment(VisitorCommentReq visitorCommentReq) {
-
-
         Optional<Member> writer = memberRepository.findById(visitorCommentReq.getWriterId());
         Optional<Member> owner = memberRepository.findById(visitorCommentReq.getOwnerId());
 
-        if(writer.isEmpty() || owner.isEmpty()){
+        if (writer.isEmpty() || owner.isEmpty()) {
             throw new ExceptionHandler(ErrorStatus.FRIEND_NOT_FOUND);
         }
 
-        if(friendRepository.findFriendByMember1AndMember2(owner.get(),writer.get()).isEmpty()){
+        if (friendRepository.findFriendByMember1AndMember2(owner.get(),writer.get()).isEmpty()){
             throw new ExceptionHandler(ErrorStatus.FRIEND_NOT_FOUND);
         }
-        else{
+        else {
             CalendarVisitor calendarVisitor = new CalendarVisitor(visitorCommentReq, owner.get(),writer.get());
             calendarVisitorRepository.save(calendarVisitor);
             return true;

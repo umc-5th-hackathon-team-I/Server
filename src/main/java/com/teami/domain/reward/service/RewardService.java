@@ -5,30 +5,36 @@ import com.teami.domain.reward.dto.RewardResponse;
 import com.teami.domain.reward.entity.MemberReward;
 import com.teami.domain.reward.entity.Reward;
 import com.teami.domain.reward.repository.MemberRewardRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class RewardService {
+import static com.teami.domain.reward.entity.Reward.COMPLETE_FIVE_MISSION;
+import static com.teami.domain.reward.entity.Reward.SIGNUP_AND_CALENDAR_CREATE;
 
+@Service
+@RequiredArgsConstructor
+public class RewardService {
     private final MemberRewardRepository memberRewardRepository;
 
-    public RewardService(MemberRewardRepository memberRewardRepository) {
-        this.memberRewardRepository = memberRewardRepository;
+    public Reward createReward_Member(Member member) {
+        if (!memberRewardRepository.existsByMemberAndRewardId(member, SIGNUP_AND_CALENDAR_CREATE.getRewardId())) {
+            memberRewardRepository.save(MemberReward.createMemberReward(member, SIGNUP_AND_CALENDAR_CREATE));
+            return SIGNUP_AND_CALENDAR_CREATE;
+        }
+        return null;
     }
 
-    // 리워드 획득
-    public void getRewardForMember(Member member, Reward reward) {
-        MemberReward memberReward = MemberReward.builder()
-                .member(member)
-                .reward(reward)
-                .build();
-        memberRewardRepository.save(memberReward);
+    public Reward createReward_Mission(Member member) {
+        //    COMPLETE_FIVE_MISSION(1L, "5개의 미션을 연속으로 완료했어요!", MISSION),
+        if (!memberRewardRepository.existsByMemberAndRewardId(member, COMPLETE_FIVE_MISSION.getRewardId())) {
+            // pass
+        }
+        return null;
     }
 
-    // 얻은 리워드 리스트로 조회
-    public List<RewardResponse> getMyRewardList(Long memberId) {
+    public List<RewardResponse> getMyRewardList (Long memberId) {
         return memberRewardRepository.findByMemberId(memberId);
     }
 }
