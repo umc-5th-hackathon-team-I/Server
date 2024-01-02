@@ -25,6 +25,14 @@ public class MemberService {
         return member.get();
     }
 
+    public Member findById(Long memberId) {
+        Optional<Member> member = memberRepository.findById(memberId);
+        if (member.isEmpty()) {
+            throw new ExceptionHandler(ErrorStatus.MEMBER_NOT_FOUND);
+        }
+        return member.get();
+    }
+
     public boolean addMember(MemberRequest memberRequest){
         String loginId = memberRequest.getLoginId();
         String nickname = memberRequest.getNickname();

@@ -24,7 +24,7 @@ public class Member extends BaseEntity {
     private String nickname;
 
     @Column(nullable = false)
-    private String pasword;
+    private String password;
 
     @Column(nullable = false)
     private String refreshToken;
