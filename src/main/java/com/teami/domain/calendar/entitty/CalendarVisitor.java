@@ -26,4 +26,6 @@ public class CalendarVisitor extends BaseEntity {
     @JoinColumn
     private Calendar calendar;
 
+    private String content;
+
 }
