@@ -68,7 +68,21 @@ public class CalendarService {
 
         return calendarMapper.toCalendarMissionsResponse(calendar.get(), calendarMapper.toCalendarMissionResponseList(missions));
     }
-    
+
+    @Transactional
+    public CalendarMissionIdResponse completeMission(Long memberId, Long missionId) {
+        Member loginUser = memberService.findMemberById(memberId);
+        CalendarMission calendarMission = findCalendarMissionById(missionId);
+
+        if(!loginUser.getId().equals(calendarMission.getCalendar().getMember().getId()))
+            throw new ExceptionHandler(ErrorStatus.NO_AUTHORIZATION);
+
+        if(calendarMission.isComplete()) throw new ExceptionHandler(ErrorStatus.MISSION_ALREADY_COMPLETED);
+
+        calendarMission.completeMission();
+
+        return new CalendarMissionIdResponse(calendarMission.getId());
+    }
 
     private List<CalendarMissionResponse> toCalendarMissionsResponse(List<NewMissionResponse> missions, Calendar calendar) {
         LocalDate now = LocalDate.now();
