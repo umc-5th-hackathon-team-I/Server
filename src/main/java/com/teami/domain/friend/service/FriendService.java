@@ -77,7 +77,14 @@ public class FriendService {
         friend.markAsDeleted();
     }
 
+    private void validateMember(Long memberId) {
+        if (!memberRepository.existsById(memberId)) {
+            throw new ExceptionHandler(ErrorStatus.MEMBER_NOT_FOUND);
+        }
+    }
+
     public FriendListResponse getFriendList(Long memberId) {
+        validateMember(memberId);
         return new FriendListResponse(memberId, findFriendsIdByMemberId(memberId));
     }
 
