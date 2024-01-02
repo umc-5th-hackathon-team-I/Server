@@ -19,7 +19,7 @@ public class RewardService {
     private final MemberRewardRepository memberRewardRepository;
 
     public Reward createReward_Member(Member member) {
-        if (!memberRewardRepository.existsByMemberAndRewardId(member, SIGNUP_AND_CALENDAR_CREATE.getRewardId())) {
+        if (!memberRewardRepository.existsByMemberAndReward(member, SIGNUP_AND_CALENDAR_CREATE)) {
             memberRewardRepository.save(MemberReward.createMemberReward(member, SIGNUP_AND_CALENDAR_CREATE));
             return SIGNUP_AND_CALENDAR_CREATE;
         }
@@ -28,7 +28,7 @@ public class RewardService {
 
     public Reward createReward_Mission(Member member) {
         //    COMPLETE_FIVE_MISSION(1L, "5개의 미션을 연속으로 완료했어요!", MISSION),
-        if (!memberRewardRepository.existsByMemberAndRewardId(member, COMPLETE_FIVE_MISSION.getRewardId())) {
+        if (!memberRewardRepository.existsByMemberAndReward(member, COMPLETE_FIVE_MISSION)) {
             // pass
         }
         return null;
