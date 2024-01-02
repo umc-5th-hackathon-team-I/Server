@@ -23,6 +23,7 @@ public enum ErrorStatus implements BaseErrorCode {
     MEMBER_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "이미 존재하는 아이디 입니다."),
     NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
     NICKNAME_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4003", "이미 존재하는 닉네임 입니다."),
+    PASSWORD_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4004", "비밀번호가 일치하지 않습니다."),
 
 
     // 예시,,,

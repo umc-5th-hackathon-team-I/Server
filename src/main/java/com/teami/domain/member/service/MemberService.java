@@ -1,6 +1,8 @@
 package com.teami.domain.member.service;
 
 
+import com.teami.domain.member.dto.LoginRequest;
+import com.teami.domain.member.dto.LoginResponse;
 import com.teami.domain.member.dto.MemberRequest;
 import com.teami.domain.member.entitty.Member;
 import com.teami.domain.member.repository.MemberRepository;
@@ -34,11 +36,31 @@ public class MemberService {
 
         Member member = new Member(memberRequest);
 
-        Member member1 = memberRepository.save(member);
+        memberRepository.save(member);
 
-        System.out.println(member1.getNickname());
         return true;
     }
 
 
+    public Member login(LoginRequest loginRequest) {
+        String loginId = loginRequest.getLoginId();
+        String pw = loginRequest.getPassword();
+
+        System.out.println(loginId);
+        Member existMember = memberRepository.findMemberByLoginId(loginId);
+        System.out.println(existMember);
+
+
+        if(existMember != null){
+            if(pw.equals(existMember.getPasword())){
+                return existMember;
+            }
+            else{
+                throw new ExceptionHandler(ErrorStatus.PASSWORD_NOT_FOUND);
+            }
+        }
+        else{
+            throw new ExceptionHandler(ErrorStatus.MEMBER_NOT_FOUND);
+        }
+    }
 }
