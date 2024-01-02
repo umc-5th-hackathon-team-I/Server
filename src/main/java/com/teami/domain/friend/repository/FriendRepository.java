@@ -1,5 +1,7 @@
-package com.teami.domain.friend.entity;
+package com.teami.domain.friend.repository;
 
+
+import com.teami.domain.friend.entity.Friend;
 import com.teami.domain.member.entitty.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
