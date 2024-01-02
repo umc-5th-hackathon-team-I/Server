@@ -68,7 +68,7 @@ public class MemberService {
 
 
         if(existMember != null){
-            if(pw.equals(existMember.getPasword())){
+            if(pw.equals(existMember.getPassword())){
                 return existMember;
             }
             else{
